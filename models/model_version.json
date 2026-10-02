@@ -1,0 +1,12 @@
+{
+  "model_version": "flightsense-v2.1-xgboost",
+  "architecture": "XGBoost",
+  "decision_threshold": 0.53,
+  "trained_at": "2026-09-24T15:26:56.452983",
+  "is_production": true,
+  "roc_auc": 0.6182,
+  "f1_score": 0.2945,
+  "recall": 0.4863,
+  "precision": 0.2112,
+  "accuracy": 0.6436
+}

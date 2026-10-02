@@ -1,0 +1,45 @@
+{
+  "dataset_path": "C:\\Users\\lokir\\OneDrive\\Desktop\\FlightSense-AI\\data\\flights.csv",
+  "total_dataset_shape": [
+    399999,
+    34
+  ],
+  "target_distribution": {
+    "0": 328351,
+    "1": 71648,
+    "delay_rate": 0.1791
+  },
+  "split_metadata": {
+    "split_strategy": "time_aware",
+    "reasoning": "Time-aware split: Train=Months 1\u20138, Validation=Month 9, Test=Months 10\u201312 (UNTOUCHED).",
+    "train_shape": [
+      268323,
+      13
+    ],
+    "val_shape": [
+      32456,
+      13
+    ],
+    "test_shape": [
+      99220,
+      13
+    ],
+    "train_target_distribution": {
+      "0": 215846,
+      "1": 52477,
+      "delay_rate": 0.19557399104810247
+    },
+    "val_target_distribution": {
+      "0": 28460,
+      "1": 3996,
+      "delay_rate": 0.12312053241311313
+    },
+    "test_target_distribution": {
+      "0": 84045,
+      "1": 15175,
+      "delay_rate": 0.1529429550493852
+    }
+  },
+  "training_duration_seconds": 209.4,
+  "timestamp": "2026-09-24T15:26:56.450461"
+}

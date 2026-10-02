@@ -1,0 +1,22 @@
+{
+  "categorical_features": [
+    "carrier",
+    "origin",
+    "destination",
+    "time_of_day"
+  ],
+  "numerical_features": [
+    "dep_hour",
+    "dep_minute",
+    "arr_hour",
+    "arr_minute",
+    "month",
+    "day_of_week",
+    "distance",
+    "is_weekend",
+    "scheduled_duration"
+  ],
+  "target_col": "is_delayed",
+  "num_transformed_features": 668,
+  "decision_threshold": 0.53
+}

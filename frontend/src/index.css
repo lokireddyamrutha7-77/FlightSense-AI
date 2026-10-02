@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    background-color: #070C18;
+    color: #F1F5F9;
+    font-family: Inter, system-ui, sans-serif;
+    min-height: 100vh;
+  }
+}
+
+/* Custom Cockpit Glassmorphism & Glowing Effects */
+.cockpit-card {
+  background-color: rgba(11, 19, 41, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(38, 59, 105, 0.6);
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.cockpit-card:hover {
+  border-color: rgba(0, 168, 232, 0.4);
+}
+
+.cockpit-card-glow {
+  background-color: rgba(11, 19, 41, 0.9);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 168, 232, 0.3);
+  border-radius: 0.75rem;
+  box-shadow: 0 0 20px rgba(0, 168, 232, 0.15);
+}
+
+/* Custom Palette Utility Classes */
+.bg-aviation-900 { background-color: #070C18; }
+.bg-aviation-850 { background-color: #0B1329; }
+.bg-aviation-800 { background-color: #111C38; }
+.bg-aviation-700 { background-color: #1A294D; }
+
+.border-aviation-700 { border-color: #1A294D; }
+.border-aviation-cyan { border-color: #00B4D8; }
+
+.text-aviation-cyan { color: #00B4D8; }
+.text-aviation-sky { color: #00A8E8; }
+
+/* Scrollbar Customization */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #070C18;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1A294D;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00A8E8;
+}
