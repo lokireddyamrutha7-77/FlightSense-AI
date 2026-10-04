@@ -5,7 +5,7 @@ import { Button } from '../ui/Button';
 import { LoadingSkeleton } from '../ui/LoadingSkeleton';
 import { apiService } from '../../services/api';
 import type { AnalyticsOverviewResponse, PredictionHistoryItem } from '../../types/api';
-import { Plane, AlertTriangle, TrendingUp, ChevronRight, Activity, Cpu } from 'lucide-react';
+import { Plane, AlertTriangle, TrendingUp, ChevronRight, Activity } from 'lucide-react';
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid, BarChart, Bar, Cell, PieChart, Pie } from 'recharts';
 
 interface DashboardModuleProps {
@@ -57,26 +57,36 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({ onNavigate }) 
 
   return (
     <div className="space-y-6">
-      {/* Production Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-aviation-850 border border-aviation-cyan/40 rounded-xl gap-4">
-        <div className="flex items-center space-x-3">
-          <div className="p-2.5 bg-aviation-cyan/20 rounded-xl text-aviation-cyan">
-            <Cpu className="w-6 h-6 animate-pulse" />
-          </div>
-          <div>
+      {/* PRIMARY FEATURE HERO BANNER: Flight Delay Prediction Visual Emphasis */}
+      <div className="bg-gradient-to-r from-aviation-850 via-aviation-900 to-aviation-850 border-2 border-aviation-cyan/50 rounded-2xl p-6 shadow-2xl shadow-aviation-cyan/10 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-80 h-full bg-aviation-cyan/10 blur-3xl pointer-events-none" />
+
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+          <div className="space-y-2 max-w-2xl">
             <div className="flex items-center space-x-2">
-              <h3 className="text-base font-bold text-white">FlightSense Production Analytics Engine</h3>
-              <Badge variant="success">XGBoost Threshold 0.53</Badge>
+              <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-aviation-cyan text-aviation-900 font-extrabold uppercase tracking-wider">
+                PRIMARY PLATFORM FEATURE
+              </span>
+              <span className="text-xs text-aviation-sky font-mono font-semibold">XGBoost ML Engine</span>
             </div>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Powered by 5.71M historical flight dataset & SHAP TreeExplainer attributions.
+
+            <h2 className="text-2xl md:text-3xl font-extrabold text-white font-mono tracking-tight">
+              FLIGHT DELAY PREDICTION
+            </h2>
+
+            <p className="text-xs md:text-sm text-slate-300 font-sans leading-relaxed">
+              Enter flight details &rarr; Get delay probability &rarr; See risk level &rarr; Understand key SHAP factors.
             </p>
           </div>
-        </div>
-        <div className="flex items-center space-x-3">
-          <Button size="sm" onClick={() => onNavigate('prediction')}>
-            Run Delay Prediction <ChevronRight className="w-4 h-4 ml-1" />
-          </Button>
+
+          <button
+            onClick={() => onNavigate('prediction')}
+            className="flex items-center justify-center space-x-2 bg-gradient-to-r from-aviation-cyan to-blue-600 hover:from-aviation-cyan/90 hover:to-blue-500 text-aviation-900 font-extrabold px-6 py-3.5 rounded-xl text-sm transition-all shadow-lg shadow-aviation-cyan/25 transform hover:-translate-y-0.5 shrink-0"
+          >
+            <Plane className="w-5 h-5 transform -rotate-45" />
+            <span>Launch Delay Prediction</span>
+            <ChevronRight className="w-4 h-4 ml-1" />
+          </button>
         </div>
       </div>
 

@@ -7,17 +7,23 @@ from backend.app.schemas.prediction import (
     WhatIfSimulationRequest,
 )
 from backend.app.services.ml_service import ml_service
+from backend.app.api.v1.endpoints.auth import get_optional_current_user
 
 router = APIRouter()
 
 @router.post("/predict", response_model=FlightPredictionResponse)
-def predict_flight_delay(request: FlightPredictionRequest, db: Session = Depends(get_db)):
+def predict_flight_delay(
+    request: FlightPredictionRequest,
+    db: Session = Depends(get_db),
+    current_user = Depends(get_optional_current_user)
+):
     """
     Predicts flight delay probability, expected delay minutes, risk level,
     and SHAP key factor attributions using the real ML model, and logs prediction to DB.
     """
     try:
-        return ml_service.predict_delay(request, db_session=db)
+        user_id = current_user.id if current_user else None
+        return ml_service.predict_delay(request, db_session=db, user_id=user_id)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Prediction error: {str(e)}")
 

@@ -6,14 +6,18 @@ import { apiService } from '../../services/api';
 import type { FlightPredictionRequest, FlightPredictionResponse } from '../../types/api';
 import { Plane, Sparkles, Clock } from 'lucide-react';
 
-export const DelayPredictionModule: React.FC = () => {
+interface DelayPredictionModuleProps {
+  initialFlightData?: Partial<FlightPredictionRequest>;
+}
+
+export const DelayPredictionModule: React.FC<DelayPredictionModuleProps> = ({ initialFlightData }) => {
   const [formData, setFormData] = useState<FlightPredictionRequest>({
-    flight_number: 'AA-1042',
-    carrier: 'AA',
-    origin: 'JFK',
-    destination: 'LAX',
-    scheduled_departure: '2026-10-15T14:30:00Z',
-    distance_miles: 2475,
+    flight_number: initialFlightData?.flight_number || 'AA-1042',
+    carrier: initialFlightData?.carrier || 'AA',
+    origin: initialFlightData?.origin || 'JFK',
+    destination: initialFlightData?.destination || 'LAX',
+    scheduled_departure: initialFlightData?.scheduled_departure || '2026-10-15T14:30:00Z',
+    distance_miles: initialFlightData?.distance_miles || 2475,
   });
 
   const [prediction, setPrediction] = useState<FlightPredictionResponse | null>(null);

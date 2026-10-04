@@ -132,3 +132,75 @@ def test_auth_register_and_login():
     assert me_res.status_code == 200
     assert me_res.json()["email"] == email
 
+
+def test_otp_and_phone_auth_flow():
+    """Test OTP generation, verification, and phone number registration/login."""
+    import uuid
+    phone = f"+1555{uuid.uuid4().hex[:7].replace('a','1').replace('b','2').replace('c','3').replace('d','4').replace('e','5').replace('f','6')[:7]}"
+
+    # 1. Request OTP
+    otp_req = client.post("/api/v1/auth/signup/request-otp", json={"target": phone, "target_type": "phone", "purpose": "signup"})
+    assert otp_req.status_code == 200
+    data = otp_req.json()
+    assert data["success"] is True
+    dev_otp = data["dev_otp"]
+    assert dev_otp is not None
+
+    # 2. Verify OTP & Signup
+    signup_res = client.post("/api/v1/auth/signup/verify-otp", json={
+        "target": phone,
+        "target_type": "phone",
+        "otp_code": dev_otp,
+        "password": "SecurePassword123",
+        "full_name": "Phone User"
+    })
+    assert signup_res.status_code == 200
+    token = signup_res.json()["access_token"]
+    assert signup_res.json()["user"]["phone_number"] == phone
+
+    # 3. Login with Phone
+    login_res = client.post("/api/v1/auth/login", json={"identifier": phone, "password": "SecurePassword123"})
+    assert login_res.status_code == 200
+    assert "access_token" in login_res.json()
+
+
+def test_profile_and_saved_flights_flow():
+    """Test GET/PUT /profile and saved flights CRUD endpoints."""
+    import uuid
+    email = f"profile_{uuid.uuid4().hex[:6]}@flightsense.ai"
+    reg_res = client.post("/api/v1/auth/register", json={"email": email, "password": "Password123", "full_name": "Profile Tester"})
+    token = reg_res.json()["access_token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    # 1. Get Profile
+    prof_res = client.get("/api/v1/profile", headers=headers)
+    assert prof_res.status_code == 200
+    prof_data = prof_res.json()
+    assert prof_data["email"] == email
+    assert "stats" in prof_data
+
+    # 2. Update Profile
+    update_res = client.put("/api/v1/profile", json={"full_name": "Updated Name", "preferred_airports": ["JFK", "SFO"]}, headers=headers)
+    assert update_res.status_code == 200
+    assert update_res.json()["full_name"] == "Updated Name"
+
+    # 3. Add Saved Flight
+    saved_res = client.post("/api/v1/saved-flights", json={
+        "flight_number": "AA-999",
+        "carrier": "AA",
+        "origin": "JFK",
+        "destination": "SFO"
+    }, headers=headers)
+    assert saved_res.status_code == 200
+    flight_id = saved_res.json()["id"]
+
+    # 4. Get Saved Flights
+    list_res = client.get("/api/v1/saved-flights", headers=headers)
+    assert list_res.status_code == 200
+    assert len(list_res.json()) >= 1
+
+    # 5. Delete Saved Flight
+    del_res = client.delete(f"/api/v1/saved-flights/{flight_id}", headers=headers)
+    assert del_res.status_code == 200
+
+

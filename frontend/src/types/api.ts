@@ -9,15 +9,121 @@ export interface HealthResponse {
 
 export interface UserResponse {
   id: number;
-  email: string;
+  email?: string;
+  phone_number?: string;
   full_name?: string;
+  email_verified: boolean;
+  phone_verified: boolean;
   is_active: boolean;
+  created_at?: string;
 }
 
 export interface AuthTokenResponse {
   access_token: string;
   token_type: string;
   user: UserResponse;
+}
+
+export interface RequestOTPRequest {
+  target: string;
+  target_type: 'email' | 'phone';
+  purpose?: 'signup' | 'reset_password';
+}
+
+export interface RequestOTPResponse {
+  success: boolean;
+  message: string;
+  cooldown_seconds?: number;
+  dev_otp?: string;
+}
+
+export interface VerifySignupOTPRequest {
+  target: string;
+  target_type: 'email' | 'phone';
+  otp_code: string;
+  password: string;
+  full_name?: string;
+}
+
+export interface LoginRequest {
+  identifier?: string;
+  email?: string;
+  phone_number?: string;
+  password: string;
+}
+
+export interface ForgotPasswordRequest {
+  target: string;
+  target_type: 'email' | 'phone';
+}
+
+export interface ResetPasswordRequest {
+  target: string;
+  otp_code: string;
+  new_password: string;
+}
+
+export interface UserProfileStats {
+  total_predictions: number;
+  delayed_predictions_count: number;
+  most_checked_airline?: string;
+  most_checked_route?: string;
+  most_checked_airport?: string;
+  recent_prediction?: {
+    prediction_id: string;
+    flight_number: string;
+    carrier: string;
+    origin: string;
+    destination: string;
+    delay_probability: number;
+    risk_level: string;
+    created_at?: string;
+  };
+}
+
+export interface CustomerProfileResponse {
+  user_id: number;
+  full_name?: string;
+  email?: string;
+  phone_number?: string;
+  email_verified: boolean;
+  phone_verified: boolean;
+  avatar_url?: string;
+  account_created_at?: string;
+  preferred_airports: string[];
+  preferred_routes: Array<{ origin: string; destination: string }>;
+  stats: UserProfileStats;
+}
+
+export interface UpdateProfileRequest {
+  full_name?: string;
+  avatar_url?: string;
+  preferred_airports?: string[];
+  preferred_routes?: Array<{ origin: string; destination: string }>;
+}
+
+export interface ChangePasswordRequest {
+  old_password: string;
+  new_password: string;
+}
+
+export interface SavedFlightCreate {
+  flight_number: string;
+  carrier: string;
+  origin: string;
+  destination: string;
+  scheduled_departure?: string;
+}
+
+export interface SavedFlightResponse {
+  id: number;
+  user_id: number;
+  flight_number: string;
+  carrier: string;
+  origin: string;
+  destination: string;
+  scheduled_departure?: string;
+  created_at: string;
 }
 
 export interface FlightPredictionRequest {

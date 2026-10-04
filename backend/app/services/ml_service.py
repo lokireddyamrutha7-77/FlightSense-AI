@@ -113,7 +113,7 @@ class MLService:
             "time_of_day": time_of_day,
         }
 
-    def predict_delay(self, req: FlightPredictionRequest, db_session=None) -> FlightPredictionResponse:
+    def predict_delay(self, req: FlightPredictionRequest, db_session=None, user_id: Optional[int] = None) -> FlightPredictionResponse:
         pred_id = f"pred_{uuid.uuid4().hex[:12]}"
         temporal = self._extract_datetime_features(req.scheduled_departure)
 
@@ -190,7 +190,7 @@ class MLService:
                 log_data["distance_miles"] = req.distance_miles
                 log_data["input_features"] = input_row
                 log_data["shap_summary"] = [s.model_dump() for s in shap_summary]
-                create_prediction_log(db_session, log_data)
+                create_prediction_log(db_session, log_data, user_id=user_id)
             except Exception as e:
                 logger.warning(f"Could not persist prediction log to DB: {e}")
 

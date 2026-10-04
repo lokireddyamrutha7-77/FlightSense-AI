@@ -14,6 +14,12 @@ import type {
   SHAPExplanationDetail,
   AuthTokenResponse,
   UserResponse,
+  RequestOTPResponse,
+  VerifySignupOTPRequest,
+  CustomerProfileResponse,
+  UpdateProfileRequest,
+  SavedFlightCreate,
+  SavedFlightResponse,
 } from '../types/api';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1';
@@ -45,13 +51,77 @@ export const apiService = {
     return res.data;
   },
 
-  login: async (email: string, password: string): Promise<AuthTokenResponse> => {
-    const res = await apiClient.post<AuthTokenResponse>('/auth/login', { email, password });
+  requestSignupOTP: async (target: string, targetType: 'email' | 'phone', purpose: string = 'signup'): Promise<RequestOTPResponse> => {
+    const res = await apiClient.post<RequestOTPResponse>('/auth/signup/request-otp', {
+      target,
+      target_type: targetType,
+      purpose,
+    });
+    return res.data;
+  },
+
+  verifySignupOTP: async (req: VerifySignupOTPRequest): Promise<AuthTokenResponse> => {
+    const res = await apiClient.post<AuthTokenResponse>('/auth/signup/verify-otp', req);
+    return res.data;
+  },
+
+  login: async (identifier: string, password: string): Promise<AuthTokenResponse> => {
+    const res = await apiClient.post<AuthTokenResponse>('/auth/login', { identifier, password });
+    return res.data;
+  },
+
+  forgotPassword: async (target: string, targetType: 'email' | 'phone'): Promise<RequestOTPResponse> => {
+    const res = await apiClient.post<RequestOTPResponse>('/auth/forgot-password', {
+      target,
+      target_type: targetType,
+    });
+    return res.data;
+  },
+
+  resetPassword: async (target: string, otpCode: string, newPassword: string): Promise<{ success: boolean; message: string }> => {
+    const res = await apiClient.post('/auth/reset-password', {
+      target,
+      otp_code: otpCode,
+      new_password: newPassword,
+    });
     return res.data;
   },
 
   getProfile: async (): Promise<UserResponse> => {
     const res = await apiClient.get<UserResponse>('/auth/me');
+    return res.data;
+  },
+
+  getCustomerProfile: async (): Promise<CustomerProfileResponse> => {
+    const res = await apiClient.get<CustomerProfileResponse>('/profile');
+    return res.data;
+  },
+
+  updateCustomerProfile: async (req: UpdateProfileRequest): Promise<CustomerProfileResponse> => {
+    const res = await apiClient.put<CustomerProfileResponse>('/profile', req);
+    return res.data;
+  },
+
+  changePassword: async (oldPassword: string, newPassword: string): Promise<{ success: boolean; message: string }> => {
+    const res = await apiClient.post('/profile/change-password', {
+      old_password: oldPassword,
+      new_password: newPassword,
+    });
+    return res.data;
+  },
+
+  getSavedFlights: async (): Promise<SavedFlightResponse[]> => {
+    const res = await apiClient.get<SavedFlightResponse[]>('/saved-flights');
+    return res.data;
+  },
+
+  saveFlight: async (req: SavedFlightCreate): Promise<SavedFlightResponse> => {
+    const res = await apiClient.post<SavedFlightResponse>('/saved-flights', req);
+    return res.data;
+  },
+
+  deleteSavedFlight: async (flightId: number): Promise<{ success: boolean; message: string }> => {
+    const res = await apiClient.delete(`/saved-flights/${flightId}`);
     return res.data;
   },
 
@@ -90,7 +160,7 @@ export const apiService = {
     return res.data;
   },
 
-  getPredictionHistory: async (params?: { carrier?: string; risk_level?: string; flight_number?: string }): Promise<PredictionHistoryItem[]> => {
+  getPredictionHistory: async (params?: { carrier?: string; risk_level?: string; flight_number?: string; mine_only?: boolean }): Promise<PredictionHistoryItem[]> => {
     const res = await apiClient.get<PredictionHistoryItem[]>('/history', { params });
     return res.data;
   },
@@ -100,4 +170,5 @@ export const apiService = {
     return res.data;
   },
 };
+
 

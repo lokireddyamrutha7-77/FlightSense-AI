@@ -43,11 +43,35 @@ def get_db():
         db.close()
 
 def init_db():
-    """Initializes database tables if they do not exist."""
+    """Initializes database tables if they do not exist and applies schema migrations."""
     try:
         from backend.app.db.models import Base as ModelsBase
         ModelsBase.metadata.create_all(bind=engine)
+        
+        # Execute safe migrations for existing tables
+        with engine.connect() as conn:
+            from sqlalchemy import text
+            # Ensure prediction_history has user_id column
+            try:
+                conn.execute(text("ALTER TABLE prediction_history ADD COLUMN user_id INTEGER;"))
+                conn.commit()
+            except Exception:
+                pass  # Already exists or dialect handled
+            
+            # Ensure users has phone_number, email_verified, phone_verified
+            for col_sql in [
+                "ALTER TABLE users ADD COLUMN phone_number VARCHAR(50);",
+                "ALTER TABLE users ADD COLUMN email_verified BOOLEAN DEFAULT 0;",
+                "ALTER TABLE users ADD COLUMN phone_verified BOOLEAN DEFAULT 0;"
+            ]:
+                try:
+                    conn.execute(text(col_sql))
+                    conn.commit()
+                except Exception:
+                    pass
+
         logger.info("Database tables initialized successfully.")
     except Exception as e:
         logger.error(f"Failed to initialize database tables: {e}")
+
 
