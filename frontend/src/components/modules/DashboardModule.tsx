@@ -53,6 +53,16 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({ onNavigate }) 
     );
   }
 
+  const formattedMonthlyTrends = (data?.monthly_trends || []).map((m) => ({
+    ...m,
+    delay_rate_pct: Number((m.delay_rate * 100).toFixed(1)),
+  }));
+
+  const formattedHourlyDistribution = (data?.hourly_distribution || []).map((h) => ({
+    ...h,
+    delay_prob_pct: Number((h.delay_probability * 100).toFixed(1)),
+  }));
+
   const COLORS = ['#00A8E8', '#F59E0B', '#EF4444', '#10B981', '#8B5CF6'];
 
   return (
@@ -67,7 +77,7 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({ onNavigate }) 
               <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-aviation-cyan text-aviation-900 font-extrabold uppercase tracking-wider">
                 PRIMARY PLATFORM FEATURE
               </span>
-              <span className="text-xs text-aviation-sky font-mono font-semibold">XGBoost ML Engine</span>
+              <span className="text-xs text-aviation-sky font-mono font-semibold">XGBoost ML Engine (Threshold 0.53)</span>
             </div>
 
             <h2 className="text-2xl md:text-3xl font-extrabold text-white font-mono tracking-tight">
@@ -98,9 +108,9 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({ onNavigate }) 
             <Plane className="w-4 h-4 text-aviation-cyan" />
           </div>
           <div className="text-2xl font-bold text-white font-mono">
-            {data.total_flights_analyzed.toLocaleString()}
+            {(data.total_flights_analyzed || 5714008).toLocaleString()}
           </div>
-          <div className="text-xs text-emerald-400 mt-1 font-medium">Dataset Coverage: 2015-2026</div>
+          <div className="text-xs text-emerald-400 mt-1 font-medium">Dataset Coverage: 2015 Historical US Flights</div>
         </Card>
 
         <Card>
@@ -111,7 +121,7 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({ onNavigate }) 
           <div className="text-2xl font-bold text-amber-400 font-mono">
             {(data.overall_delay_rate * 100).toFixed(1)}%
           </div>
-          <div className="text-xs text-slate-400 mt-1">Arrival Delay &ge; 15 mins</div>
+          <div className="text-xs text-slate-400 mt-1">Arrival Delay &gt; 15 mins (Kaggle Dataset)</div>
         </Card>
 
         <Card>
@@ -143,13 +153,13 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({ onNavigate }) 
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="text-base font-bold text-white">Monthly Delay Rate Trend</h3>
-              <p className="text-xs text-slate-400">Historical delay probability across calendar months</p>
+              <p className="text-xs text-slate-400">Historical delay probability across calendar months (ARRIVAL_DELAY &gt; 15m)</p>
             </div>
-            <Badge variant="info">5.7M Flights</Badge>
+            <Badge variant="info">5.71M Historical Flights</Badge>
           </div>
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={data.monthly_trends}>
+              <AreaChart data={formattedMonthlyTrends}>
                 <defs>
                   <linearGradient id="colorDelay" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#00A8E8" stopOpacity={0.4}/>
@@ -158,12 +168,12 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({ onNavigate }) 
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1A294D" />
                 <XAxis dataKey="month" stroke="#64748B" tick={{ fontSize: 11 }} />
-                <YAxis stroke="#64748B" tick={{ fontSize: 11 }} unit="%" />
+                <YAxis stroke="#64748B" tick={{ fontSize: 11 }} unit="%" domain={[0, 30]} />
                 <Tooltip
                   contentStyle={{ backgroundColor: '#0B1329', borderColor: '#263B69', borderRadius: '8px' }}
-                  formatter={(val: any) => [`${(val * 100).toFixed(1)}%`, 'Delay Rate']}
+                  formatter={(val: any) => [`${val}%`, 'Delay Rate']}
                 />
-                <Area type="monotone" dataKey="delay_rate" stroke="#00A8E8" strokeWidth={2} fillOpacity={1} fill="url(#colorDelay)" />
+                <Area type="monotone" dataKey="delay_rate_pct" stroke="#00A8E8" strokeWidth={2} fillOpacity={1} fill="url(#colorDelay)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -211,15 +221,15 @@ export const DashboardModule: React.FC<DashboardModuleProps> = ({ onNavigate }) 
           </div>
           <div className="h-60 w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={data.hourly_distribution}>
+              <BarChart data={formattedHourlyDistribution}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#1A294D" />
                 <XAxis dataKey="hour" stroke="#64748B" tick={{ fontSize: 10 }} />
-                <YAxis stroke="#64748B" tick={{ fontSize: 10 }} unit="%" />
+                <YAxis stroke="#64748B" tick={{ fontSize: 10 }} unit="%" domain={[0, 40]} />
                 <Tooltip
                   contentStyle={{ backgroundColor: '#0B1329', borderColor: '#263B69', borderRadius: '8px' }}
-                  formatter={(val: any) => [`${(val * 100).toFixed(1)}%`, 'Delay Risk']}
+                  formatter={(val: any) => [`${val}%`, 'Delay Risk']}
                 />
-                <Bar dataKey="delay_probability" fill="#38BDF8" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="delay_prob_pct" fill="#38BDF8" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
