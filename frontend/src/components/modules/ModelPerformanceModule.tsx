@@ -311,34 +311,32 @@ export const ModelPerformanceModule: React.FC = () => {
         </div>
       </Card>
 
-      {/* 4. NEW Four-Color Model Comparison Bar Chart (Part 6 - White Report Style) */}
-      <div className="bg-white text-slate-900 border border-slate-200 rounded-xl p-5 shadow-sm space-y-3">
-        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+      {/* 4. NEW Four-Color Model Comparison Bar Chart (Part 6 - Dark Theme) */}
+      <Card>
+        <div className="flex items-center justify-between border-b border-aviation-700/60 pb-3 mb-3">
           <div>
-            <h3 className="text-base font-bold text-slate-900 flex items-center space-x-2">
-              <BarChart3 className="w-5 h-5 text-blue-600" />
+            <h3 className="text-base font-bold text-white flex items-center space-x-2">
+              <BarChart3 className="w-5 h-5 text-aviation-cyan" />
               <span>Model Performance Metric Comparison Across Candidate Architectures</span>
             </h3>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-slate-400 mt-0.5">
               Grouped evaluation metric comparison for Logistic Regression, Decision Tree, Random Forest, and XGBoost
             </p>
           </div>
-          <span className="text-xs font-mono font-semibold px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md border border-slate-200">
-            PBL Report Figure
-          </span>
+          <Badge variant="info">PBL Report Figure</Badge>
         </div>
 
         <div className="h-80 w-full pt-2">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={fourModelComparisonData} margin={{ top: 20, right: 30, left: 10, bottom: 10 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
-              <XAxis dataKey="metric" stroke="#334155" tick={{ fontSize: 12, fill: '#334155', fontWeight: 600 }} />
-              <YAxis stroke="#334155" tick={{ fontSize: 11, fill: '#334155' }} unit="%" domain={[0, 80]} label={{ value: 'Score (%)', angle: -90, position: 'insideLeft', fill: '#1E293B', fontSize: 12, fontWeight: 600 }} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#1A294D" />
+              <XAxis dataKey="metric" stroke="#64748B" tick={{ fontSize: 12, fill: '#94A3B8', fontWeight: 600 }} />
+              <YAxis stroke="#64748B" tick={{ fontSize: 11, fill: '#94A3B8' }} unit="%" domain={[0, 80]} label={{ value: 'Score (%)', angle: -90, position: 'insideLeft', fill: '#94A3B8', fontSize: 12, fontWeight: 600 }} />
               <Tooltip
-                contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#CBD5E1', color: '#0F172A', borderRadius: '8px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)' }}
+                contentStyle={{ backgroundColor: '#0B1329', borderColor: '#263B69', color: '#F1F5F9', borderRadius: '8px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.3)' }}
                 formatter={(val: any) => [`${val}%`, 'Score']}
               />
-              <Legend wrapperStyle={{ paddingTop: '12px', fontSize: '12px', color: '#1E293B' }} />
+              <Legend wrapperStyle={{ paddingTop: '12px', fontSize: '12px', color: '#94A3B8' }} />
               <Bar dataKey="Logistic Regression" fill="#2563EB" radius={[3, 3, 0, 0]} />
               <Bar dataKey="Decision Tree" fill="#DC2626" radius={[3, 3, 0, 0]} />
               <Bar dataKey="Random Forest" fill="#D97706" radius={[3, 3, 0, 0]} />
@@ -346,42 +344,42 @@ export const ModelPerformanceModule: React.FC = () => {
             </BarChart>
           </ResponsiveContainer>
         </div>
-      </div>
+      </Card>
 
-      {/* 5. ROC & PR Curves (Part 3 & Part 4 - White Report Style) */}
+      {/* 5. ROC & PR Curves (Part 3 & Part 4 - Dark Theme) */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Figure 6.2 ROC Curves */}
-        <div className="bg-white text-slate-900 border border-slate-200 rounded-xl p-5 shadow-sm space-y-3">
-          <div className="border-b border-slate-100 pb-2">
-            <h3 className="text-sm font-bold text-slate-900 flex items-center space-x-2">
-              <LineChartIcon className="w-4 h-4 text-blue-600" />
+        <Card>
+          <div className="border-b border-aviation-700/60 pb-2 mb-3">
+            <h3 className="text-sm font-bold text-white flex items-center space-x-2">
+              <LineChartIcon className="w-4 h-4 text-aviation-cyan" />
               <span>Receiver Operating Characteristic (ROC) Curves</span>
             </h3>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-slate-400 mt-0.5">
               Figure 6.2 ROC Curves of the Candidate Models
             </p>
           </div>
           <div className="h-72 w-full pt-1">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={rocChartData} margin={{ top: 10, right: 20, left: 0, bottom: 20 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#1A294D" />
                 <XAxis
                   dataKey="fpr"
-                  stroke="#334155"
-                  tick={{ fontSize: 10, fill: '#334155' }}
+                  stroke="#64748B"
+                  tick={{ fontSize: 10, fill: '#64748B' }}
                   domain={[0, 1]}
-                  label={{ value: 'False positive rate', position: 'insideBottom', offset: -12, fill: '#1E293B', fontSize: 11, fontWeight: 600 }}
+                  label={{ value: 'False positive rate', position: 'insideBottom', offset: -12, fill: '#94A3B8', fontSize: 11, fontWeight: 600 }}
                 />
                 <YAxis
-                  stroke="#334155"
-                  tick={{ fontSize: 10, fill: '#334155' }}
+                  stroke="#64748B"
+                  tick={{ fontSize: 10, fill: '#64748B' }}
                   domain={[0, 1]}
-                  label={{ value: 'True positive rate', angle: -90, position: 'insideLeft', offset: 10, fill: '#1E293B', fontSize: 11, fontWeight: 600 }}
+                  label={{ value: 'True positive rate', angle: -90, position: 'insideLeft', offset: 10, fill: '#94A3B8', fontSize: 11, fontWeight: 600 }}
                 />
                 <Tooltip
-                  contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#CBD5E1', color: '#0F172A', borderRadius: '8px' }}
+                  contentStyle={{ backgroundColor: '#0B1329', borderColor: '#263B69', color: '#F1F5F9', borderRadius: '8px' }}
                 />
-                <Legend wrapperStyle={{ paddingTop: '8px', fontSize: '11px', color: '#1E293B' }} />
+                <Legend wrapperStyle={{ paddingTop: '8px', fontSize: '11px', color: '#94A3B8' }} />
                 <Line type="monotone" dataKey="Logistic Regression (AUC 0.610)" stroke="#2563EB" strokeWidth={2} dot={false} />
                 <Line type="monotone" dataKey="Decision Tree (AUC 0.605)" stroke="#DC2626" strokeWidth={2} dot={false} />
                 <Line type="monotone" dataKey="Random Forest (AUC 0.611)" stroke="#D97706" strokeWidth={2} dot={false} />
@@ -390,40 +388,40 @@ export const ModelPerformanceModule: React.FC = () => {
               </LineChart>
             </ResponsiveContainer>
           </div>
-        </div>
+        </Card>
 
         {/* Figure 6.3 Precision-Recall Curves */}
-        <div className="bg-white text-slate-900 border border-slate-200 rounded-xl p-5 shadow-sm space-y-3">
-          <div className="border-b border-slate-100 pb-2">
-            <h3 className="text-sm font-bold text-slate-900 flex items-center space-x-2">
-              <LineChartIcon className="w-4 h-4 text-emerald-600" />
+        <Card>
+          <div className="border-b border-aviation-700/60 pb-2 mb-3">
+            <h3 className="text-sm font-bold text-white flex items-center space-x-2">
+              <LineChartIcon className="w-4 h-4 text-emerald-400" />
               <span>Precision–Recall Curves</span>
             </h3>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-slate-400 mt-0.5">
               Figure 6.3 Precision–Recall Curves of the Candidate Models
             </p>
           </div>
           <div className="h-72 w-full pt-1">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={prChartData} margin={{ top: 10, right: 20, left: 0, bottom: 20 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#1A294D" />
                 <XAxis
                   dataKey="recall"
-                  stroke="#334155"
-                  tick={{ fontSize: 10, fill: '#334155' }}
+                  stroke="#64748B"
+                  tick={{ fontSize: 10, fill: '#64748B' }}
                   domain={[0, 1]}
-                  label={{ value: 'Recall', position: 'insideBottom', offset: -12, fill: '#1E293B', fontSize: 11, fontWeight: 600 }}
+                  label={{ value: 'Recall', position: 'insideBottom', offset: -12, fill: '#94A3B8', fontSize: 11, fontWeight: 600 }}
                 />
                 <YAxis
-                  stroke="#334155"
-                  tick={{ fontSize: 10, fill: '#334155' }}
+                  stroke="#64748B"
+                  tick={{ fontSize: 10, fill: '#64748B' }}
                   domain={[0, 0.4]}
-                  label={{ value: 'Precision', angle: -90, position: 'insideLeft', offset: 10, fill: '#1E293B', fontSize: 11, fontWeight: 600 }}
+                  label={{ value: 'Precision', angle: -90, position: 'insideLeft', offset: 10, fill: '#94A3B8', fontSize: 11, fontWeight: 600 }}
                 />
                 <Tooltip
-                  contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#CBD5E1', color: '#0F172A', borderRadius: '8px' }}
+                  contentStyle={{ backgroundColor: '#0B1329', borderColor: '#263B69', color: '#F1F5F9', borderRadius: '8px' }}
                 />
-                <Legend wrapperStyle={{ paddingTop: '8px', fontSize: '11px', color: '#1E293B' }} />
+                <Legend wrapperStyle={{ paddingTop: '8px', fontSize: '11px', color: '#94A3B8' }} />
                 <Line type="monotone" dataKey="Logistic Regression (PR-AUC 0.207)" stroke="#2563EB" strokeWidth={2} dot={false} />
                 <Line type="monotone" dataKey="Decision Tree (PR-AUC 0.200)" stroke="#DC2626" strokeWidth={2} dot={false} />
                 <Line type="monotone" dataKey="Random Forest (PR-AUC 0.209)" stroke="#D97706" strokeWidth={2} dot={false} />
@@ -432,47 +430,45 @@ export const ModelPerformanceModule: React.FC = () => {
               </LineChart>
             </ResponsiveContainer>
           </div>
-        </div>
+        </Card>
       </div>
 
-      {/* 6. Top 15 Global Feature Importances (Part 5 - White Report Style) */}
-      <div className="bg-white text-slate-900 border border-slate-200 rounded-xl p-5 shadow-sm space-y-3">
-        <div className="border-b border-slate-100 pb-2 flex items-center justify-between">
+      {/* 6. Top 15 Global Feature Importances (Part 5 - Dark Theme) */}
+      <Card>
+        <div className="border-b border-aviation-700/60 pb-2 mb-3 flex items-center justify-between">
           <div>
-            <h3 className="text-sm font-bold text-slate-900">Top 15 Global Feature Importances</h3>
-            <p className="text-xs text-slate-500 mt-0.5">Figure 6.5 Top 15 Feature Importances of the XGBoost Model</p>
+            <h3 className="text-sm font-bold text-white">Top 15 Global Feature Importances</h3>
+            <p className="text-xs text-slate-400 mt-0.5">Figure 6.5 Top 15 Feature Importances of the XGBoost Model</p>
           </div>
-          <span className="text-xs font-mono font-semibold px-2 py-0.5 bg-slate-100 text-slate-700 rounded border border-slate-200">
-            XGBoost Model
-          </span>
+          <Badge variant="info">XGBoost Model</Badge>
         </div>
         <div className="h-96 w-full pt-1">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart layout="vertical" data={top15FeatureImportances} margin={{ top: 10, right: 30, left: 100, bottom: 20 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#1A294D" />
               <XAxis
                 type="number"
-                stroke="#334155"
-                tick={{ fontSize: 10, fill: '#334155' }}
-                label={{ value: 'Normalized XGBoost feature importance', position: 'insideBottom', offset: -12, fill: '#1E293B', fontSize: 11, fontWeight: 600 }}
+                stroke="#64748B"
+                tick={{ fontSize: 10, fill: '#64748B' }}
+                label={{ value: 'Normalized XGBoost feature importance', position: 'insideBottom', offset: -12, fill: '#94A3B8', fontSize: 11, fontWeight: 600 }}
               />
               <YAxis
                 dataKey="feature"
                 type="category"
-                stroke="#334155"
-                tick={{ fontSize: 10, fill: '#334155' }}
+                stroke="#64748B"
+                tick={{ fontSize: 10, fill: '#64748B' }}
                 width={130}
-                label={{ value: 'Feature', angle: -90, position: 'insideLeft', offset: -80, fill: '#1E293B', fontSize: 11, fontWeight: 600 }}
+                label={{ value: 'Feature', angle: -90, position: 'insideLeft', offset: -80, fill: '#94A3B8', fontSize: 11, fontWeight: 600 }}
               />
               <Tooltip
-                contentStyle={{ backgroundColor: '#FFFFFF', borderColor: '#CBD5E1', color: '#0F172A', borderRadius: '8px' }}
+                contentStyle={{ backgroundColor: '#0B1329', borderColor: '#263B69', color: '#F1F5F9', borderRadius: '8px' }}
                 formatter={(val: any) => [Number(val).toFixed(4), 'Normalized Importance']}
               />
-              <Bar dataKey="importance" fill="#0284C7" radius={[0, 4, 4, 0]} />
+              <Bar dataKey="importance" fill="#00A8E8" radius={[0, 4, 4, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
-      </div>
+      </Card>
 
       {/* 7. XGBoost Confusion Matrix (Threshold = 0.53) */}
       <Card>
